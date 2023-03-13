@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
+
+        stage('Deploy to Dev') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                sh 'npm install'
+                sh 'npm run deploy-dev'
+            }
+        }
+
+        stage('Deploy to Prod') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh 'npm install'
+                sh 'npm run deploy-prod'
+            }
+        }
+    }
+}
